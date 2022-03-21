@@ -53,6 +53,11 @@ h1 {
   
 }
 
+p {
+  color: red;
+  font-size: x-small;
+}
+
 
 
 .selectInput {

@@ -1,6 +1,7 @@
 import React from "react";
 import "./NewCostumerForm.css";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import StudentLifeCard from "../Cards/StudentLifeCard";
 import AnywhereCard from "../Cards/AnywhereCard";
 import LiquidCard from "../Cards/LiquidCard";
@@ -16,6 +17,16 @@ function NewCostumerForm() {
       jobStatus: "",
       income: "",
     },
+
+    validationSchema: Yup.object({
+      firstName: Yup.string().required("First Name is Required"),
+      lastName: Yup.string().required("Last Name is Required"),
+      dob: Yup.string().required("Date of Birth is Required"),
+      jobStatus: Yup.string().required("Job Status is Required"),
+      income: Yup.string().required("Anual Income is Required"),
+    }),
+
+
     onSubmit: (values) => {
       console.log(values);
     },
@@ -38,7 +49,7 @@ function NewCostumerForm() {
             <option value="Mr.">Mr.</option>
             <option value="Mrs.">Mrs.</option>
             <option value="Miss">Miss</option>
-            <option value="Ds.">Ms.</option>
+            <option value="Ds.">Ms</option>
             <option value="Dr.">Dr.</option>
           </select>
           <br />
@@ -51,8 +62,10 @@ function NewCostumerForm() {
             placeholder="First name"
             className="formInput"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.firstName}
           />
+          {formik.errors.firstName ? <p>{formik.errors.firstName}</p> : null}
           <br />
           <label>Middle Name</label>
           <br />
@@ -77,6 +90,7 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.lastName}
           />
+          {formik.errors.lastName ? <p>{formik.errors.lastName}</p> : null}
           <br />
           <label>Date of Birth</label>
           <br />
@@ -88,6 +102,7 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.dob}
           />
+          {formik.errors.dob ? <p>{formik.errors.dob}</p> : null}
           <br />
           <label>Job Status</label>
           <br />
@@ -104,6 +119,7 @@ function NewCostumerForm() {
             <option value="Student">Student</option>
             <option value="Unemployed">Unemployed</option>
           </select>
+          {formik.errors.jobStatus ? <p>{formik.errors.jobStatus}</p> : null}
           <br />
           <label>Annual Income Before Tax:</label>
           <br />
@@ -116,6 +132,7 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.income}
           />
+          {formik.errors.income ? <p>{formik.errors.income}</p> : null}
           <br />
           <br />
 
