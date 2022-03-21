@@ -16,16 +16,17 @@ function NewCostumerForm() {
       jobStatus: "",
       income: "",
     },
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
-
-  console.log(formik.values);
 
   return (
     <>
       <div className="NewCostumerForm">
         <h1>Check your eligibility </h1>
 
-        <form action="" className="formData">
+        <form className="formData" onSubmit={formik.handleSubmit}>
           <label>Title </label>
           <select
             className="selectInput"
@@ -125,9 +126,7 @@ function NewCostumerForm() {
           <br />
         </form>
       </div>
-      <StudentLifeCard />
-      <AnywhereCard />
-      <LiquidCard />
+
       <br />
       <br />
     </>
