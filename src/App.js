@@ -1,10 +1,12 @@
+import React from 'react';
 import './App.css';
-import NewCostumer from './components/Costumer/NewCostumer';
+import Main from './components/Pages/Main';
+
 
 function App() {
   return (
     <>
-      <NewCostumer />
+      < Main />
     </>
   );
 }
