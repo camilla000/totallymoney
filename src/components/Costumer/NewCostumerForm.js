@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./NewCostumerForm.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import StudentLifeCard from "../Cards/StudentLifeCard";
-import AnywhereCard from "../Cards/AnywhereCard";
-import LiquidCard from "../Cards/LiquidCard";
+import Card from "../Cards/Card";
 
 function NewCostumerForm() {
+  const [showForm, setShowForm] = useState(true);
+  
+
+  const data = {
+    customerTitle: ["Mr.", "Mrs.","Ms.", "Miss", "Ds.", "Dr."],
+    jobsStatus: [
+      "Employed Full Time",
+      "Employed Part Time",
+      "Self-Employed",
+      "Student",
+      "Unemployed",
+    ],
+  };
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -23,9 +35,8 @@ function NewCostumerForm() {
       lastName: Yup.string().required("Last Name is Required"),
       dob: Yup.string().required("Date of Birth is Required"),
       jobStatus: Yup.string().required("Job Status is Required"),
-      income: Yup.string().required("Anual Income is Required"),
+      income: Yup.number().required("Annual Income is Required"),
     }),
-
 
     onSubmit: (values) => {
       console.log(values);
@@ -34,11 +45,11 @@ function NewCostumerForm() {
 
   return (
     <>
-      <div className="NewCostumerForm">
-        <h1>Check your eligibility </h1>
-
-        <form className="formData" onSubmit={formik.handleSubmit}>
-          <label>Title </label>
+    
+      <form className="formData" onSubmit={formik.handleSubmit}>
+        <div className="NewCostumerForm">
+          <h1 className="label">Check your eligibility </h1>
+          <label className="label">Title</label>
           <select
             className="selectInput"
             id="title"
@@ -46,15 +57,13 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.title}
           >
-            <option value="Mr.">Mr.</option>
-            <option value="Mrs.">Mrs.</option>
-            <option value="Miss">Miss</option>
-            <option value="Ds.">Ms</option>
-            <option value="Dr.">Dr.</option>
+            {data.customerTitle.map((title) => (
+              <option value={title}>{title}</option>
+            ))}
           </select>
-          <br />
-          <label>First Name</label>
-          <br />
+
+          <label className="label">First Name</label>
+
           <input
             id="firstName"
             type="text"
@@ -65,10 +74,11 @@ function NewCostumerForm() {
             onBlur={formik.handleBlur}
             value={formik.values.firstName}
           />
-          {formik.errors.firstName ? <p>{formik.errors.firstName}</p> : null}
-          <br />
-          <label>Middle Name</label>
-          <br />
+          {formik.errors.firstName ? (
+            <p className="formError">{formik.errors.firstName}</p>
+          ) : null}
+
+          <label className="label">Middle Name</label>
           <input
             id="middleName"
             type="text"
@@ -78,9 +88,7 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.middleName}
           />
-          <br />
-          <label>Last Name</label>
-          <br />
+          <label className="label">Last Name</label>
           <input
             id="lastName"
             type="text"
@@ -90,10 +98,10 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.lastName}
           />
-          {formik.errors.lastName ? <p>{formik.errors.lastName}</p> : null}
-          <br />
-          <label>Date of Birth</label>
-          <br />
+          {formik.errors.lastName ? (
+            <p className="formError">{formik.errors.lastName}</p>
+          ) : null}
+          <label className="label">Date of Birth</label>
           <input
             id="dob"
             type="date"
@@ -102,10 +110,10 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.dob}
           />
-          {formik.errors.dob ? <p>{formik.errors.dob}</p> : null}
-          <br />
-          <label>Job Status</label>
-          <br />
+          {formik.errors.dob ? (
+            <p className="formError">{formik.errors.dob}</p>
+          ) : null}
+          <label className="label">Job Status</label>
           <select
             id="jobStatus"
             name="jobStatus"
@@ -113,18 +121,17 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.jobStatus}
           >
-            <option value="Employed">Employed Full Time</option>
-            <option value="Employed">Employed Part Time</option>
-            <option value="Self-Employed">Self-Employed</option>
-            <option value="Student">Student</option>
-            <option value="Unemployed">Unemployed</option>
+            <option value="Employed">Choose One</option>
+            {data.jobsStatus.map((job) => (
+              <option value={job}>{job}</option>
+            ))}
           </select>
-          {formik.errors.jobStatus ? <p>{formik.errors.jobStatus}</p> : null}
-          <br />
-          <label>Annual Income Before Tax:</label>
-          <br />
+          {formik.errors.jobStatus ? (
+            <p className="formError">{formik.errors.jobStatus}</p>
+          ) : null}
+          <label className="label">Annual Income Before Tax:</label>
           <input
-            type="text"
+            type="number"
             id="income"
             name="income"
             placeholder="£"
@@ -132,20 +139,27 @@ function NewCostumerForm() {
             onChange={formik.handleChange}
             value={formik.values.income}
           />
-          {formik.errors.income ? <p>{formik.errors.income}</p> : null}
-          <br />
-          <br />
-
-          <button type="submit" className="submitButton">
+          {formik.errors.income ? (
+            <p className="formError">{formik.errors.income}</p>
+          ) : null}
+          <button
+            onClick={() => setShowForm(false)}
+            type="submit"
+            className="submitButton"
+          >
             Submit
           </button>
-
-          <br />
-        </form>
-      </div>
-
-      <br />
-      <br />
+        </div>
+        {formik.isSubmitting && (
+          <>
+            <Card selectCard="Anywhere" />
+            {formik.values.jobStatus === "Student" && (
+              <Card selectCard="Student" />
+            )}
+            {formik.values.income >= 16000 && <Card selectCard="Liquid" />}
+          </>
+        )}
+      </form>
     </>
   );
 }
